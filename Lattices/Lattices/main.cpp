@@ -1,5 +1,6 @@
 #include "Lattice.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 int Menu();
@@ -72,8 +73,31 @@ Lattice* InputFromKeyboard()
 
 Lattice* InputFromFile()
 {
-	cout << "Sorry. It not works now :((" << endl;
-	return NULL;
+	char fileName[256];
+	cout << "file name: ";
+	cin >> fileName;
+	
+	ifstream inputFile;
+	inputFile.open(fileName);
+
+	int size;
+	double** basis;
+	inputFile >> size;
+	basis = new double*[size];
+	
+	for (int i = 0; i < size; i++)
+	{
+		basis[i] = new double[size];
+		for (int j = 0; j < size; j++)
+			inputFile >> basis[i][j];
+	}
+
+	Lattice* result = new Lattice(size, basis);
+	for (int i =0; i< size; i++)
+		delete[] basis[i];
+	delete[] basis;
+
+	return result;
 }
 
 void PrintLattice(Lattice* lattice)
