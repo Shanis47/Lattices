@@ -4,7 +4,7 @@ Lattice::Lattice(int size, double** basis)
 {
 	_size = size;
 	_basis = new double*[_size];
-	for (int i = 0; i < _size; i++)
+	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
 		std::memcpy(_basis[i], basis[i], sizeof(double)*_size);
@@ -19,6 +19,9 @@ Lattice::Lattice(void)
 
 Lattice::~Lattice(void)
 {
+	for (uint i =0; i< _size; i++)
+		delete[] _basis[i];
+
 	delete[] _basis;
 }
 
@@ -30,7 +33,7 @@ uint Lattice::GetSize()
 double** Lattice::GetBasis()
 {
 	double** result = new double*[_size];
-	for (int i = 0; i < _size; i++)
+	for (uint i = 0; i < _size; i++)
 	{
 		result[i] = new double[_size];
 		std::memcpy(result[i], _basis[i], sizeof(double)*_size);
@@ -43,7 +46,7 @@ void Lattice::SetBasis(uint size, double** basis)
 {
 	_size = size;
 	_basis = new double*[_size];
-	for (int i = 0; i < _size; i++)
+	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
 		std::memcpy(_basis[i], basis[i], sizeof(double)*_size);
