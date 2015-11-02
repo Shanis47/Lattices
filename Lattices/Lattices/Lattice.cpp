@@ -14,12 +14,14 @@ bool ChechkLinearIdependence(uint size, double** basis)
 	}
 
 	bool *line_used = new bool[size];
+	memset(line_used, 0, sizeof(bool)*size);
 	for (int i=0; i<size; ++i) 
 	{
 		int j;
 		for (j = 0; j < size; j++)
 			if (!line_used[j] && abs(work[j][i]) > eps)
 				break;
+
 		if (j == size)
 			return 0;
 		else {
