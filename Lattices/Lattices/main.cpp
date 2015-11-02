@@ -63,7 +63,15 @@ Lattice* InputFromKeyboard()
 			cin >> basis[i][j];
 	}
 
-	Lattice* result = new Lattice(size, basis);
+	Lattice* result;
+	try
+	{
+		result = new Lattice(size, basis);
+	}
+	catch (exception &e)
+	{
+		cout << e.what() << endl;
+	}
 	for (int i =0; i< size; i++)
 		delete[] basis[i];
 	delete[] basis;
@@ -92,7 +100,16 @@ Lattice* InputFromFile()
 			inputFile >> basis[i][j];
 	}
 
-	Lattice* result = new Lattice(size, basis);
+	Lattice* result;
+	try
+	{
+		result = new Lattice(size, basis);
+	}
+	catch (exception &e)
+	{
+		cout << e.what() << endl;
+	}
+
 	for (int i =0; i< size; i++)
 		delete[] basis[i];
 	delete[] basis;

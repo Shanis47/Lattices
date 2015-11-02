@@ -10,7 +10,7 @@ private:
 	double** _basis;
 public:
 	Lattice(void);
-	Lattice(int size, double** basis);
+	Lattice(uint size, double** basis);
 	~Lattice(void);
 
 	void SetBasis(uint, double** );
