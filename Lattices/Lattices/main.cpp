@@ -48,35 +48,16 @@ int Menu()
 	return result;
 }
 
+Lattice* InputBasis(uint size, istream &input);
+
 Lattice* InputFromKeyboard()
 {
 	int size;
 	double** basis;
 	cout << "size = ";
 	cin >> size;
-	basis = new double*[size];
-	
-	for (int i = 0; i < size; i++)
-	{
-		basis[i] = new double[size];
-		for (int j = 0; j < size; j++)
-			cin >> basis[i][j];
-	}
 
-	Lattice* result;
-	try
-	{
-		result = new Lattice(size, basis);
-	}
-	catch (exception &e)
-	{
-		cout << e.what() << endl;
-	}
-	for (int i =0; i< size; i++)
-		delete[] basis[i];
-	delete[] basis;
-
-	return result;
+	return InputBasis(size, cin);
 }
 
 Lattice* InputFromFile()
@@ -89,32 +70,8 @@ Lattice* InputFromFile()
 	inputFile.open(fileName);
 
 	int size;
-	double** basis;
 	inputFile >> size;
-	basis = new double*[size];
-	
-	for (int i = 0; i < size; i++)
-	{
-		basis[i] = new double[size];
-		for (int j = 0; j < size; j++)
-			inputFile >> basis[i][j];
-	}
-
-	Lattice* result;
-	try
-	{
-		result = new Lattice(size, basis);
-	}
-	catch (exception &e)
-	{
-		cout << e.what() << endl;
-	}
-
-	for (int i =0; i< size; i++)
-		delete[] basis[i];
-	delete[] basis;
-
-	return result;
+	return InputBasis(size, inputFile);
 }
 
 void PrintLattice(Lattice* lattice)
@@ -132,4 +89,33 @@ void PrintLattice(Lattice* lattice)
 	for (int i =0; i< size; i++)
 		delete[] basis[i];
 	delete[] basis;
+}
+
+Lattice* InputBasis(uint size, istream &input)
+{
+	double** basis;
+	basis = new double*[size];
+	
+	for (int i = 0; i < size; i++)
+	{
+		basis[i] = new double[size];
+		for (int j = 0; j < size; j++)
+			input >> basis[i][j];
+	}
+
+	Lattice* result;
+	try
+	{
+		result = new Lattice(size, basis);
+	}
+	catch (exception &e)
+	{
+		cout << e.what() << endl;
+	}
+
+	for (int i =0; i< size; i++)
+		delete[] basis[i];
+	delete[] basis;
+
+	return result;
 }
