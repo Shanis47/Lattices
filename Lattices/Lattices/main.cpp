@@ -77,6 +77,13 @@ Lattice* InputFromFile()
 void PrintLattice(Lattice* lattice)
 {
 	int size = lattice->GetSize();
+
+	if (!size)
+	{
+		cout << "Basis not setted!" << endl;
+		return;
+	}
+
 	double** basis = lattice->GetBasis();
 
 	for (int i = 0; i < size; i++)
@@ -111,6 +118,7 @@ Lattice* InputBasis(uint size, istream &input)
 	catch (exception &e)
 	{
 		cout << e.what() << endl;
+		result = new Lattice();
 	}
 
 	for (int i =0; i< size; i++)
