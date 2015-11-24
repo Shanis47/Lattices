@@ -2,6 +2,7 @@
 
 #define MAX_DIGIT_COUNT 50
 #define MAX_ACCURACY 50
+#define RADIX 10
 #define SBYTE signed char
 
 class LongReal
@@ -16,16 +17,16 @@ public:
 	~LongReal();
 
 	//Unar
-	const LongReal operator - ();
+	const LongReal operator - () const;
 
 	//Binary
 	const LongReal operator = (LongReal& second);
 
 	//Arithmetical operators
-	const LongReal operator + (LongReal& second);
-	const LongReal operator - (const LongReal& second);
-	const LongReal operator * (const LongReal& second);
-	const LongReal operator / (const LongReal& second);
+	const LongReal operator + (const LongReal& second) const;
+	const LongReal operator - (const LongReal& second) const;
+	const LongReal operator * (const LongReal& second) const;
+	const LongReal operator / (const LongReal& second) const;
 
 	//Logical operators
 	const bool operator == (const LongReal second);
