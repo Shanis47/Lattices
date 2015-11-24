@@ -100,3 +100,53 @@ void Lattice::SetBasis(uint size, double** basis)
 		std::memcpy(_basis[i], basis[i], sizeof(double)*_size);
 	}
 }
+
+double* Lattice::Proj (double* a, double* b, uint size)
+{
+	double scala_b=0;
+	double scalb_b=0;
+	_size=size;
+	for (int i=0;i<_size;i++)
+	{
+		scala_b+=a[i]*b[i];
+		scalb_b+=b[i]*b[i];
+	}
+	double scal_na_scal = scala_b/scalb_b;
+	double* proj = new double[_size];
+	for(int j=0;j<_size;j++)
+	{
+		proj[j]=scal_na_scal*b[j];
+	}
+	return proj;
+}
+
+double** Lattice::GramSchmidt(double** basis, uint size)
+{
+	_size=size;
+	double** ort_vectors=new double*[_size];
+	for (int i=0;i<_size;i++)
+	{
+		ort_vectors[i]=new double[_size];
+		if (i==0)
+		{
+			for (int j=0;j<_size;j++)
+			{
+				ort_vectors[i][j]=_basis[i][j];
+			}
+			continue;
+		}
+		for (int m=0;m<_size;m++)
+		{
+			ort_vectors[i][m]=_basis[i][m];
+		}
+		for (int k=0;k<i-1;k++)
+		{
+			double* proj = Proj(_basis[i], ort_vectors[k], _size);
+			for (int p=0;p<_size;p++)
+			{
+				ort_vectors[i][p]-=proj[p];
+			}
+		}
+	}
+	return ort_vectors;
+}
