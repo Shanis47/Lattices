@@ -70,9 +70,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Lattice.h" />
+    <ClInclude Include="LongReal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lattice.cpp" />
+    <ClCompile Include="LongReal.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
