@@ -16,19 +16,22 @@ public:
 	~LongReal();
 
 	//Unar
-	friend const LongReal operator - (const LongReal& second);
+	const LongReal operator - ();
+
+	//Binary
+	const LongReal operator = (LongReal& second);
 
 	//Arithmetical operators
-	friend const LongReal operator + (const LongReal& first, LongReal& second);
-	friend const LongReal operator - (const LongReal& first, const LongReal& second);
-	friend const LongReal operator * (const LongReal& first, const LongReal& second);
-	friend const LongReal operator / (const LongReal& first, const LongReal& second);
+	const LongReal operator + (LongReal& second);
+	const LongReal operator - (const LongReal& second);
+	const LongReal operator * (const LongReal& second);
+	const LongReal operator / (const LongReal& second);
 
 	//Logical operators
-	friend const bool operator == (const LongReal first, const LongReal second);
-	friend const bool operator != (const LongReal first, const LongReal second);
-	friend const bool operator > (const LongReal first, const LongReal second);
-	friend const bool operator < (const LongReal first, const LongReal second);
-	friend const bool operator >= (const LongReal first, const LongReal second);
-	friend const bool operator <= (const LongReal first, const LongReal second);
+	const bool operator == (const LongReal second);
+	const bool operator != (const LongReal second);
+	const bool operator > (const LongReal second);
+	const bool operator < (const LongReal second);
+	const bool operator >= (const LongReal second);
+	const bool operator <= (const LongReal second);
 };
