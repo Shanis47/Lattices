@@ -32,12 +32,12 @@ public:
 	const LongReal operator / (const LongReal& second) const;
 
 	//Logical operators
-	const bool operator == (const LongReal second) const;
-	const bool operator != (const LongReal second) const;
-	const bool operator > (const LongReal second) const;
-	const bool operator < (const LongReal second) const;
-	const bool operator >= (const LongReal second) const;
-	const bool operator <= (const LongReal second) const;
+	const bool operator == (const LongReal& second) const;
+	const bool operator != (const LongReal& second) const;
+	const bool operator > (const LongReal& second) const;
+	const bool operator < (const LongReal& second) const;
+	const bool operator >= (const LongReal& second) const;
+	const bool operator <= (const LongReal& second) const;
 	
 	//I/O operators
 	friend ostream& operator << (ostream& out, const LongReal& r);

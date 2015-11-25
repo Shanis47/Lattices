@@ -29,7 +29,6 @@ LongReal::~LongReal()
 
 const LongReal LongReal::operator- () const
 {
-	//_isPositive = !_isPositive;
 	LongReal result = *this;
 	result._isPositive = !this->_isPositive;
 	return result;
@@ -43,7 +42,7 @@ const LongReal LongReal::operator= (LongReal& second)
 	return *this;
 }
 
-const bool LongReal::operator == (const LongReal second) const
+const bool LongReal::operator == (const LongReal& second) const
 {
 	if (this->_isPositive != second._isPositive)
 		return 0;
@@ -59,49 +58,49 @@ const bool LongReal::operator == (const LongReal second) const
 	return 1;
 }
 
-const bool LongReal::operator != (const LongReal second) const
+const bool LongReal::operator != (const LongReal& second) const
 {
 	return !(*this == second);
 }
 
-const bool LongReal::operator > (const LongReal second) const
+const bool LongReal::operator > (const LongReal& second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return 1;
 
-	for (char i = MAX_DIGIT_COUNT - 1; i >= 0; i--)
-		if (this->_posDigits[i] > second._posDigits[i])
-			return 1;
+	for (char i = 0; i < MAX_DIGIT_COUNT; i++)
+		if (this->_posDigits[i] != second._posDigits[i])
+			return this->_posDigits[i] > second._posDigits[i];
 
-	for (char i = 0; i < MAX_ACCURACY; i++)
+	for (char i = MAX_ACCURACY; i >= 0; i--)
 		if (this->_negDigits[i] > second._negDigits[i])
-			return 1;
+			return this->_negDigits[i] > second._negDigits[i];
 
 	return 0;
 }
 
-const bool LongReal::operator < (const LongReal second) const
+const bool LongReal::operator < (const LongReal& second) const
 {
 	if (!this->_isPositive && second._isPositive)
 		return 1;
 
-	for (char i = MAX_DIGIT_COUNT - 1; i >= 0; i--)
-		if (this->_posDigits[i] < second._posDigits[i])
-			return 1;
+	for (char i = 0; i < MAX_DIGIT_COUNT; i++)
+		if (this->_posDigits[i] != second._posDigits[i])
+			return this->_posDigits[i] < second._posDigits[i];
 
-	for (char i = 0; i < MAX_ACCURACY; i++)
-		if (this->_negDigits[i] < second._negDigits[i])
-			return 1;
+	for (char i = MAX_ACCURACY; i >= 0; i--)
+		if (this->_negDigits[i] != second._negDigits[i])
+			return this->_posDigits[i] < second._posDigits[i];
 
 	return 0;
 }
 
-const bool LongReal::operator >= (const LongReal second) const
+const bool LongReal::operator >= (const LongReal& second) const
 {
 	return !(*this < second);
 }
 
-const bool LongReal::operator <= (const LongReal second) const
+const bool LongReal::operator <= (const LongReal& second) const
 {
 	return !(*this > second);
 }
@@ -201,7 +200,7 @@ const LongReal LongReal::operator * (const LongReal& second) const
 	for (int i = MAX_DIGIT_COUNT + MAX_ACCURACY - 1; i >= 0; i--)
 	{
 		SBYTE pred = 0;
-		for (int j = j < MAX_DIGIT_COUNT + MAX_ACCURACY - 1; j >= 0; j--)
+		for (int j = MAX_DIGIT_COUNT + MAX_ACCURACY - 1; j >= 0; j--)
 		{
 			SBYTE mul = mul1Digits[j] * mul2Digits[i];
 			resultDigits[i + j +1] += pred + mul % RADIX;
@@ -215,7 +214,7 @@ const LongReal LongReal::operator * (const LongReal& second) const
 		}
 	}
 
-	LongReal result = *this;
+	LongReal result;
 
 	memcpy(result._posDigits, resultDigits + sizeof(SBYTE)*MAX_DIGIT_COUNT, sizeof(SBYTE)*MAX_DIGIT_COUNT);
 	memcpy(result._negDigits, resultDigits + 2*sizeof(SBYTE)*MAX_DIGIT_COUNT, sizeof(SBYTE)*MAX_ACCURACY);
@@ -248,6 +247,9 @@ ostream& operator << (ostream& out, const LongReal& r)
 
 istream& operator >> (istream& in, LongReal& r)
 {
+	memset(r._posDigits, 0, sizeof(SBYTE)*MAX_DIGIT_COUNT);
+	memset(r._negDigits, 0, sizeof(SBYTE)*MAX_ACCURACY);
+	r._isPositive = 1;
 	SBYTE* digits = new SBYTE[MAX_DIGIT_COUNT + MAX_ACCURACY];
 	memset(digits, 0, sizeof(SBYTE)*(MAX_DIGIT_COUNT + MAX_ACCURACY));
 
