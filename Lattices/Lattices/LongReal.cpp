@@ -205,7 +205,7 @@ const LongReal LongReal::operator * (const LongReal& second) const
 		{
 			SBYTE mul = mul1Digits[j] * mul2Digits[i];
 			resultDigits[i + j +1] += pred + mul % RADIX;
-			if (resultDigits[i + j +1] > RADIX)
+			if (resultDigits[i + j +1] >= RADIX)
 			{
 				resultDigits[i+j+1] %= RADIX;
 				resultDigits[i+j]++;
