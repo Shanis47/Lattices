@@ -27,11 +27,13 @@ int main()
 		case 3:
 			PrintLattice(lattice);
 			break;
-		case 4:
-			Lattice ort_vect=new Lattice(lattice.GetSize(), lattice.GramSchmidt());
-			PrintLattice(ort_vect);
-			delete ort_vect;
-			break;
+/*		case 4:
+			{
+				Lattice* ort_vect = new Lattice(lattice->GetSize(), lattice->GramSchmidt());
+				PrintLattice(ort_vect);
+				delete ort_vect;
+				break;
+			}*/
 		default:
 			cout << "Incorrect command" << endl;
 		}
@@ -45,7 +47,7 @@ int Menu()
 	cout << "1. Input from keyboard" << endl;
 	cout << "2. Input from file" << endl;
 	cout << "3. Print lattice basis" << endl;
-	cout << "4. Do GramSchmidt" << endl;
+//	cout << "4. Do GramSchmidt" << endl;
 	cout << "0. Exit" << endl;
 	int result;
 	cin >> result;
@@ -82,6 +84,13 @@ Lattice* InputFromFile()
 void PrintLattice(Lattice* lattice)
 {
 	int size = lattice->GetSize();
+
+	if (!size)
+	{
+		cout << "Basis not setted!" << endl;
+		return;
+	}
+
 	double** basis = lattice->GetBasis();
 
 	for (int i = 0; i < size; i++)
@@ -116,6 +125,7 @@ Lattice* InputBasis(uint size, istream &input)
 	catch (exception &e)
 	{
 		cout << e.what() << endl;
+		result = new Lattice();
 	}
 
 	for (int i =0; i< size; i++)

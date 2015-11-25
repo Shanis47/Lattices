@@ -78,6 +78,8 @@
   <ItemGroup>
     <Text Include="test.txt" />
     <Text Include="test1.txt" />
+    <Text Include="test_zero_line.txt" />
+    <Text Include="test_zero_matrix.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

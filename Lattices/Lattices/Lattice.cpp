@@ -1,4 +1,6 @@
 #include "Lattice.h"
+#include <memory.h>
+#include <math.h>
 #include <exception>
 
  double* Proj(double* a, double* b, int size);
@@ -11,7 +13,7 @@ bool ChechkLinearIdependence(uint size, double** basis)
 	for (uint i = 0; i < size; i++)
 	{
 		work[i] = new double[size];
-		std::memcpy(work[i], basis[i], sizeof(double)*size);
+		memcpy(work[i], basis[i], sizeof(double)*size);
 	}
 
 	bool *line_used = new bool[size];
@@ -53,7 +55,7 @@ Lattice::Lattice(uint size, double** basis)
 	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
-		std::memcpy(_basis[i], basis[i], sizeof(double)*_size);
+		memcpy(_basis[i], basis[i], sizeof(double)*_size);
 	}
 }
 
@@ -82,7 +84,7 @@ double** Lattice::GetBasis()
 	for (uint i = 0; i < _size; i++)
 	{
 		result[i] = new double[_size];
-		std::memcpy(result[i], _basis[i], sizeof(double)*_size);
+		memcpy(result[i], _basis[i], sizeof(double)*_size);
 	}
 
 	return result;
@@ -98,7 +100,7 @@ void Lattice::SetBasis(uint size, double** basis)
 	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
-		std::memcpy(_basis[i], basis[i], sizeof(double)*_size);
+		memcpy(_basis[i], basis[i], sizeof(double)*_size);
 	}
 }
 
