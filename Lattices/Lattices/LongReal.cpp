@@ -231,8 +231,10 @@ ostream& operator << (ostream& out, const LongReal& r)
 {
 	int i;
 	for (i = 0; i < MAX_DIGIT_COUNT && r._posDigits[i] == 0; i++);
+	if (!r._isPositive)
+		out << '-';
 	if (i == MAX_DIGIT_COUNT)
-		out << 0;
+		out << '0';
 	for (; i < MAX_DIGIT_COUNT; i++)
 		out << char(r._posDigits[i]+'0');
 
