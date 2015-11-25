@@ -72,7 +72,7 @@ const bool LongReal::operator > (const LongReal& second) const
 		if (this->_posDigits[i] != second._posDigits[i])
 			return this->_posDigits[i] > second._posDigits[i];
 
-	for (char i = MAX_ACCURACY; i >= 0; i--)
+	for (char i = 0; i < MAX_ACCURACY; i++)
 		if (this->_negDigits[i] > second._negDigits[i])
 			return this->_negDigits[i] > second._negDigits[i];
 
@@ -88,7 +88,7 @@ const bool LongReal::operator < (const LongReal& second) const
 		if (this->_posDigits[i] != second._posDigits[i])
 			return this->_posDigits[i] < second._posDigits[i];
 
-	for (char i = MAX_ACCURACY; i >= 0; i--)
+	for (char i = 0; i < MAX_ACCURACY; i++)
 		if (this->_negDigits[i] != second._negDigits[i])
 			return this->_posDigits[i] < second._posDigits[i];
 
@@ -162,17 +162,18 @@ const LongReal LongReal::operator - (const LongReal& second) const
 			if (i)
 				result._negDigits[i-1]--;
 			else
-				result._posDigits[0]--;
+				result._posDigits[MAX_DIGIT_COUNT - 1]--;
 		}
 	}
 
-	for (int i = 0; i < MAX_DIGIT_COUNT; i++)
+	for (int i = MAX_DIGIT_COUNT - 1; i >= 0; i--)
 	{
 		result._posDigits[i] -= second._posDigits[i];
 		if (result._posDigits[i] < 0)
 		{
-			if (i < MAX_DIGIT_COUNT - 1)
-				result._posDigits[i+1]--;
+			result._posDigits[i] += RADIX;
+			if (i > 0)
+				result._posDigits[i-1]--;
 		}
 	}
 
