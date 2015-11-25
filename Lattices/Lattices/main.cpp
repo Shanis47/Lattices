@@ -39,7 +39,8 @@ int main()
 
 			cout << "a + b : " << (a + b) << endl; 
 			cout << "a - b : " << (a - b) << endl; 
-			cout << "a * b : " << (a * b) << endl; 
+			cout << "a * b : " << (a * b) << endl;
+			cout << "a / b : " << (a / b) << endl;
 			break;
 		default:
 			cout << "Incorrect command" << endl;

@@ -225,7 +225,31 @@ const LongReal LongReal::operator * (const LongReal& second) const
 	delete[] resultDigits;
 	return result;
 }
-//	const LongReal operator / (const LongReal& second);
+
+const LongReal LongReal::operator / (const LongReal& second) const
+{
+	LongReal result;
+	LongReal reminder = *this;
+
+	//по уму делать долго, сделаем через... быстро
+	for (int i = 0; i < MAX_DIGIT_COUNT; i++)
+	{
+		while (result*second < reminder && result._posDigits[i] < RADIX) //второе выстрелить не должно
+			result._posDigits[i]++;
+		if (result*second > reminder)
+			result._posDigits[i]--;
+	}
+
+	for (int i = 0; i < MAX_ACCURACY; i++)
+	{
+		while (result*second < reminder && result._posDigits[i] < RADIX) //второе выстрелить не должно
+			result._negDigits[i]++;
+		if (result*second > reminder)
+			result._negDigits[i]--;
+	}
+
+	return result;
+}
 
 ostream& operator << (ostream& out, const LongReal& r)
 {
