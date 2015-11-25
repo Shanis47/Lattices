@@ -128,14 +128,14 @@ const LongReal LongReal::operator + (const LongReal& second) const
 		}
 	}
 
-	for (int i = 0; i < MAX_DIGIT_COUNT; i++)
+	for (int i = MAX_DIGIT_COUNT - 1; i >= 0; i--)
 	{
 		result._posDigits[i] += second._posDigits[i];
 		if (result._posDigits[i] >= RADIX)
 		{
 			result._posDigits[i] %= RADIX;
-			if (i < MAX_DIGIT_COUNT - 1)
-				result._posDigits[i+1]++;
+			if (i > 0)
+				result._posDigits[i-1]++;
 		}
 	}
 
