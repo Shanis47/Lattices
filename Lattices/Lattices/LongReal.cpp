@@ -11,6 +11,16 @@ LongReal::LongReal()
 	memset(_negDigits, 0, sizeof(SBYTE)*MAX_ACCURACY);
 }
 
+LongReal::LongReal(const LongReal& r)
+{
+	_isPositive = r._isPositive;
+	_posDigits = new SBYTE[MAX_DIGIT_COUNT];
+	_negDigits = new SBYTE[MAX_ACCURACY];
+
+	memcpy(_posDigits, r._posDigits, sizeof(SBYTE)*MAX_DIGIT_COUNT);
+	memcpy(_negDigits, r._negDigits, sizeof(SBYTE)*MAX_ACCURACY);
+}
+
 LongReal::~LongReal()
 {
 	delete[] _posDigits;

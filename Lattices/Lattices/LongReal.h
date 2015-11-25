@@ -16,6 +16,7 @@ private:
 
 public:
 	LongReal();
+	LongReal(const LongReal& r);
 	~LongReal();
 
 	//Unar
