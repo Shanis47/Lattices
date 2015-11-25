@@ -216,3 +216,45 @@ const LongReal LongReal::operator * (const LongReal& second) const
 	return result;
 }
 //	const LongReal operator / (const LongReal& second);
+
+ostream& operator << (ostream& out, const LongReal& r)
+{
+	int i;
+	for (i = 0; i < MAX_DIGIT_COUNT && r._posDigits[i] == 0; i++);
+	if (i == MAX_DIGIT_COUNT)
+		out << 0;
+	for (; i < MAX_DIGIT_COUNT; i++)
+		out << r._posDigits[i];
+
+	out << ".";
+
+	for (i = 0; i < MAX_ACCURACY; i++)
+		out << r._negDigits[i];
+
+	return out;
+}
+
+istream& operator >> (istream& in, LongReal& r)
+{
+	SBYTE* digits = new SBYTE[MAX_DIGIT_COUNT + MAX_ACCURACY];
+	memset(digits, 0, sizeof(SBYTE)*(MAX_DIGIT_COUNT + MAX_ACCURACY));
+
+	char pointPosition = 0, currentPosition = 0;
+	char currentChar;
+
+	while (!in.eof())
+	{
+		in.get(currentChar);
+		if (isdigit(currentChar))
+			digits[currentPosition++] = currentChar - '0';
+		else
+			if (currentChar == '.')
+				pointPosition = currentPosition;
+	}
+
+	memcpy(r._posDigits, digits, sizeof(SBYTE)*pointPosition);
+	memcpy(r._negDigits, digits + sizeof(SBYTE)*pointPosition, sizeof(SBYTE)*MAX_ACCURACY);
+
+	delete[] digits;
+	return in;
+}

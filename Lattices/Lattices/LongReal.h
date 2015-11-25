@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
 #define MAX_DIGIT_COUNT 50
 #define MAX_ACCURACY 50
@@ -35,4 +37,8 @@ public:
 	const bool operator < (const LongReal second) const;
 	const bool operator >= (const LongReal second) const;
 	const bool operator <= (const LongReal second) const;
+	
+	//I/O operators
+	friend ostream& operator << (ostream& out, const LongReal& r);
+	friend istream& operator >> (istream& in, LongReal& r);
 };
