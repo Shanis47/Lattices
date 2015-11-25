@@ -7,6 +7,7 @@ int Menu();
 int main()
 {
 	LongReal a;
+	LongReal b;
 	while (int menuResult = Menu())
 	{
 		switch (menuResult)
@@ -17,8 +18,28 @@ int main()
 			cout << a << endl;
 			break;
 		case 2:
+			cout << "enter LongReal" << endl;
+			cin >> a;
+			cin >> b;
+			cout << a << endl;
+			cout << b << endl;
+			cout << "a == b : " << (a == b) << endl; 
+			cout << "a != b : " << (a != b) << endl; 
+			cout << "a > b : " << (a > b) << endl; 
+			cout << "a < b : " << (a < b) << endl; 
+			cout << "a >= b : " << (a >= b) << endl; 
+			cout << "a <= b : " << (a <= b) << endl; 
 			break;
 		case 3:
+			cout << "enter LongReal" << endl;
+			cin >> a;
+			cin >> b;
+			cout << a << endl;
+			cout << b << endl;
+
+			cout << "a + b : " << (a + b) << endl; 
+			cout << "a - b : " << (a - b) << endl; 
+			cout << "a * b : " << (a * b) << endl; 
 			break;
 		default:
 			cout << "Incorrect command" << endl;
