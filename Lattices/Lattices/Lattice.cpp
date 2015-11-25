@@ -1,6 +1,7 @@
 #include "Lattice.h"
 #include <exception>
 
+ double* Proj(double* a, double* b, int size);
 bool ChechkLinearIdependence(uint size, double** basis)
 {
 	uint rank = size;
@@ -101,28 +102,26 @@ void Lattice::SetBasis(uint size, double** basis)
 	}
 }
 
-double* Lattice::Proj (double* a, double* b, uint size)
+double* Proj (double* a, double* b,int size)
 {
 	double scala_b=0;
 	double scalb_b=0;
-	_size=size;
-	for (int i=0;i<_size;i++)
+	for (int i=0;i<size;i++)
 	{
 		scala_b+=a[i]*b[i];
 		scalb_b+=b[i]*b[i];
 	}
 	double scal_na_scal = scala_b/scalb_b;
-	double* proj = new double[_size];
-	for(int j=0;j<_size;j++)
+	double* proj = new double[size];
+	for(int j=0;j<size;j++)
 	{
 		proj[j]=scal_na_scal*b[j];
 	}
 	return proj;
 }
 
-double** Lattice::GramSchmidt(double** basis, uint size)
+double** Lattice::GramSchmidt()
 {
-	_size=size;
 	double** ort_vectors=new double*[_size];
 	for (int i=0;i<_size;i++)
 	{
@@ -141,11 +140,12 @@ double** Lattice::GramSchmidt(double** basis, uint size)
 		}
 		for (int k=0;k<i-1;k++)
 		{
-			double* proj = Proj(_basis[i], ort_vectors[k], _size);
+			double* proj = Proj(_basis[i], ort_vectors[k],_size);
 			for (int p=0;p<_size;p++)
 			{
 				ort_vectors[i][p]-=proj[p];
 			}
+			delete[] proj;
 		}
 	}
 	return ort_vectors;
