@@ -240,13 +240,13 @@ istream& operator >> (istream& in, LongReal& r)
 	memset(digits, 0, sizeof(SBYTE)*(MAX_DIGIT_COUNT + MAX_ACCURACY));
 
 	char pointPosition = 0, currentPosition = 0;
-	char currentChar = '0';
+	char currentChar = 0;
 
 	in.clear();
-	in.get();
+	while (!(isdigit(currentChar) || currentChar == '.' || currentChar=='-'))
+		in.get(currentChar);
 	while (!in.eof() && (isdigit(currentChar) || currentChar == '.'))
 	{
-		in.get(currentChar);
 		if (currentPosition == 0 && currentChar == '-')
 		{
 			r._isPositive = 0;
@@ -257,10 +257,16 @@ istream& operator >> (istream& in, LongReal& r)
 		else
 			if (currentChar == '.')
 				pointPosition = currentPosition;
+		in.get(currentChar);
 	}
 
-	memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-pointPosition), digits, sizeof(SBYTE)*pointPosition);
-	memcpy(r._negDigits, digits + sizeof(SBYTE)*pointPosition, sizeof(SBYTE)*MAX_ACCURACY);
+	if (pointPosition != 0)
+	{
+		memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-pointPosition), digits, sizeof(SBYTE)*pointPosition);
+		memcpy(r._negDigits, digits + sizeof(SBYTE)*pointPosition, sizeof(SBYTE)*MAX_ACCURACY);
+	}
+	else
+		memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-currentPosition), digits, sizeof(SBYTE)*currentPosition);
 
 	delete[] digits;
 	return in;
