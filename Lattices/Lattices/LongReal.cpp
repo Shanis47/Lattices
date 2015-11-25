@@ -259,8 +259,13 @@ istream& operator >> (istream& in, LongReal& r)
 				pointPosition = currentPosition;
 	}
 
-	memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-pointPosition), digits, sizeof(SBYTE)*pointPosition);
-	memcpy(r._negDigits, digits + sizeof(SBYTE)*pointPosition, sizeof(SBYTE)*MAX_ACCURACY);
+	if (pointPosition != 0)
+	{
+		memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-pointPosition), digits, sizeof(SBYTE)*pointPosition);
+		memcpy(r._negDigits, digits + sizeof(SBYTE)*pointPosition, sizeof(SBYTE)*MAX_ACCURACY);
+	}
+	else
+		memcpy(r._posDigits + sizeof(SBYTE)*(MAX_ACCURACY-currentPosition), digits, sizeof(SBYTE)*currentPosition);
 
 	delete[] digits;
 	return in;
