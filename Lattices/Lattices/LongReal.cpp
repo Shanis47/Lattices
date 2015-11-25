@@ -228,6 +228,10 @@ const LongReal LongReal::operator * (const LongReal& second) const
 
 const LongReal LongReal::operator / (const LongReal& second) const
 {
+	if (this->_isPositive && !second._isPositive)
+		return -(*this / (-second));
+	if (!this->_isPositive && second._isPositive)
+		return -((-*this) / second);
 	LongReal result;
 	LongReal reminder = *this;
 
