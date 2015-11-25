@@ -257,7 +257,7 @@ istream& operator >> (istream& in, LongReal& r)
 	in.clear();
 	while (!(isdigit(currentChar) || currentChar == '.' || currentChar=='-'))
 		in.get(currentChar);
-	while (!in.eof() && (isdigit(currentChar) || currentChar == '.'))
+	while (!in.eof() && (isdigit(currentChar) || currentChar == '.' || currentChar=='-'))
 	{
 		if (currentPosition == 0 && currentChar == '-')
 		{
