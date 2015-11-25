@@ -240,13 +240,13 @@ istream& operator >> (istream& in, LongReal& r)
 	memset(digits, 0, sizeof(SBYTE)*(MAX_DIGIT_COUNT + MAX_ACCURACY));
 
 	char pointPosition = 0, currentPosition = 0;
-	char currentChar = '0';
+	char currentChar = 0;
 
 	in.clear();
-	in.get();
+	while (!(isdigit(currentChar) || currentChar == '.' || currentChar=='-'))
+		in.get(currentChar);
 	while (!in.eof() && (isdigit(currentChar) || currentChar == '.'))
 	{
-		in.get(currentChar);
 		if (currentPosition == 0 && currentChar == '-')
 		{
 			r._isPositive = 0;
@@ -257,6 +257,7 @@ istream& operator >> (istream& in, LongReal& r)
 		else
 			if (currentChar == '.')
 				pointPosition = currentPosition;
+		in.get(currentChar);
 	}
 
 	if (pointPosition != 0)
