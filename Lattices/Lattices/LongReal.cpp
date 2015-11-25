@@ -135,14 +135,14 @@ const LongReal LongReal::operator + (const LongReal& second) const
 
 const LongReal LongReal::operator - (const LongReal& second) const
 {
-	LongReal result = *this;
-
 	if (this->_isPositive && !second._isPositive)
 		return (*this + (-second));
 	if (!this->_isPositive && second._isPositive)
 		return -(second + (-*this));
 	if (*this < second)
 		return -(second - *this);
+
+	LongReal result = *this;
 
 	for (int i = MAX_ACCURACY -1; i >= 0; i--)
 	{
@@ -169,5 +169,50 @@ const LongReal LongReal::operator - (const LongReal& second) const
 
 	return result;
 }
-//	const LongReal operator * (const LongReal& second);
+
+const LongReal LongReal::operator * (const LongReal& second) const
+{
+	if (this->_isPositive && !second._isPositive)
+		return -(*this * (-second));
+	if (!this->_isPositive && second._isPositive)
+		return -(second * (-*this));
+
+	SBYTE* resultDigits = new SBYTE[2*(MAX_DIGIT_COUNT + MAX_ACCURACY)];
+	memset(resultDigits, 0, 2*sizeof(SBYTE)*(MAX_DIGIT_COUNT + MAX_ACCURACY));
+
+	SBYTE* mul1Digits = new SBYTE[MAX_DIGIT_COUNT + MAX_ACCURACY];
+	SBYTE* mul2Digits = new SBYTE[MAX_DIGIT_COUNT + MAX_ACCURACY];
+
+	memcpy(mul1Digits, this->_posDigits, sizeof(SBYTE)*MAX_DIGIT_COUNT);
+	memcpy(mul1Digits + sizeof(SBYTE)*MAX_DIGIT_COUNT, this->_negDigits, sizeof(SBYTE)*MAX_ACCURACY);
+	memcpy(mul2Digits, second._posDigits, sizeof(SBYTE)*MAX_DIGIT_COUNT);
+	memcpy(mul2Digits + sizeof(SBYTE)*MAX_DIGIT_COUNT, second._negDigits, sizeof(SBYTE)*MAX_ACCURACY);
+
+	for (int i = MAX_DIGIT_COUNT + MAX_ACCURACY - 1; i >= 0; i--)
+	{
+		SBYTE pred = 0;
+		for (int j = j < MAX_DIGIT_COUNT + MAX_ACCURACY - 1; j >= 0; j--)
+		{
+			SBYTE mul = mul1Digits[j] * mul2Digits[i];
+			resultDigits[i + j +1] += pred + mul % RADIX;
+			if (resultDigits[i + j +1] > RADIX)
+			{
+				resultDigits[i+j+1] %= RADIX;
+				resultDigits[i+j]++;
+			}
+
+			pred = mul / RADIX;
+		}
+	}
+
+	LongReal result = *this;
+
+	memcpy(result._posDigits, resultDigits + sizeof(SBYTE)*MAX_DIGIT_COUNT, sizeof(SBYTE)*MAX_DIGIT_COUNT);
+	memcpy(result._negDigits, resultDigits + 2*sizeof(SBYTE)*MAX_DIGIT_COUNT, sizeof(SBYTE)*MAX_ACCURACY);
+
+	delete[] mul2Digits;
+	delete[] mul1Digits;
+	delete[] resultDigits;
+	return result;
+}
 //	const LongReal operator / (const LongReal& second);
