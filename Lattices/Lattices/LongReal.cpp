@@ -33,7 +33,7 @@ const LongReal LongReal::operator= (LongReal& second)
 	return *this;
 }
 
-const bool LongReal::operator == (const LongReal second)
+const bool LongReal::operator == (const LongReal second) const
 {
 	if (this->_isPositive != second._isPositive)
 		return 0;
@@ -49,12 +49,12 @@ const bool LongReal::operator == (const LongReal second)
 	return 1;
 }
 
-const bool LongReal::operator != (const LongReal second)
+const bool LongReal::operator != (const LongReal second) const
 {
 	return !(*this == second);
 }
 
-const bool LongReal::operator > (const LongReal second)
+const bool LongReal::operator > (const LongReal second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return 1;
@@ -70,7 +70,7 @@ const bool LongReal::operator > (const LongReal second)
 	return 0;
 }
 
-const bool LongReal::operator < (const LongReal second)
+const bool LongReal::operator < (const LongReal second) const
 {
 	if (!this->_isPositive && second._isPositive)
 		return 1;
@@ -86,12 +86,12 @@ const bool LongReal::operator < (const LongReal second)
 	return 0;
 }
 
-const bool LongReal::operator >= (const LongReal second)
+const bool LongReal::operator >= (const LongReal second) const
 {
 	return !(*this < second);
 }
 
-const bool LongReal::operator <= (const LongReal second)
+const bool LongReal::operator <= (const LongReal second) const
 {
 	return !(*this > second);
 }
@@ -104,12 +104,8 @@ const LongReal LongReal::operator + (const LongReal& second) const
 	if (!this->_isPositive && second._isPositive)
 		return (second - (-*this));
 
-	LongReal result;
-
-	result._isPositive = this->_isPositive;
-	memcpy(result._posDigits, this->_posDigits, sizeof(SBYTE)*MAX_DIGIT_COUNT);
-	memcpy(result._negDigits, this->_negDigits, sizeof(SBYTE)*MAX_ACCURACY); 
-
+	LongReal result = *this;
+	
 	for (int i = MAX_ACCURACY -1; i >= 0; i--)
 	{
 		result._negDigits[i] += second._negDigits[i];
@@ -139,7 +135,39 @@ const LongReal LongReal::operator + (const LongReal& second) const
 
 const LongReal LongReal::operator - (const LongReal& second) const
 {
-	return *(new LongReal());
+	LongReal result = *this;
+
+	if (this->_isPositive && !second._isPositive)
+		return (*this + (-second));
+	if (!this->_isPositive && second._isPositive)
+		return -(second + (-*this));
+	if (*this < second)
+		return -(second - *this);
+
+	for (int i = MAX_ACCURACY -1; i >= 0; i--)
+	{
+		result._negDigits[i] -= second._negDigits[i];
+		if (result._negDigits[i] < 0)
+		{
+			result._negDigits[i] += RADIX;
+			if (i)
+				result._negDigits[i-1]--;
+			else
+				result._posDigits[0]--;
+		}
+	}
+
+	for (int i = 0; i < MAX_DIGIT_COUNT; i++)
+	{
+		result._posDigits[i] -= second._posDigits[i];
+		if (result._posDigits[i] < 0)
+		{
+			if (i < MAX_DIGIT_COUNT - 1)
+				result._posDigits[i+1]--;
+		}
+	}
+
+	return result;
 }
 //	const LongReal operator * (const LongReal& second);
 //	const LongReal operator / (const LongReal& second);
