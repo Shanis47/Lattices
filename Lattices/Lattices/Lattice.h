@@ -1,4 +1,5 @@
 #pragma once
+#include "LongReal.h"
 
 #define uint unsigned int
 
@@ -6,15 +7,15 @@ class Lattice
 {
 private:
 	uint _size;
-	double** _basis;
+	LongReal** _basis;
 public:
 	Lattice(void);
-	Lattice(uint size, double** basis);
+	Lattice(uint size, LongReal** basis);
 	~Lattice(void);
 
-	double** GramSchmidt();
-	void SetBasis(uint, double** );
+	LongReal** GramSchmidt();
+	void SetBasis(uint, LongReal** );
 	uint GetSize();
-	double** GetBasis();
+	LongReal** GetBasis();
 };
 

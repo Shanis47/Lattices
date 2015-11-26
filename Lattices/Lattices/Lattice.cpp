@@ -3,17 +3,17 @@
 #include <math.h>
 #include <exception>
 
- double* Proj(double* a, double* b, int size);
-bool ChechkLinearIdependence(uint size, double** basis)
+LongReal* Proj(LongReal* a, LongReal* b, int size);
+bool ChechkLinearIdependence(uint size, LongReal** basis)
 {
 	uint rank = size;
-	double eps = 1e-9;
+	LongReal eps = 1e-9;
 
-	double** work = new double*[size];
+	LongReal** work = new LongReal*[size];
 	for (uint i = 0; i < size; i++)
 	{
-		work[i] = new double[size];
-		memcpy(work[i], basis[i], sizeof(double)*size);
+		work[i] = new LongReal[size];
+		memcpy(work[i], basis[i], sizeof(LongReal)*size);
 	}
 
 	bool *line_used = new bool[size];
@@ -45,24 +45,24 @@ bool ChechkLinearIdependence(uint size, double** basis)
 	return rank == size;
 }
 
-Lattice::Lattice(uint size, double** basis)
+Lattice::Lattice(uint size, LongReal** basis)
 {
 	if (!ChechkLinearIdependence(size, basis))
 		throw std::exception("Not linear independ");
 
 	_size = size;
-	_basis = new double*[_size];
+	_basis = new LongReal*[_size];
 	for (uint i = 0; i < _size; i++)
 	{
-		_basis[i] = new double[_size];
-		memcpy(_basis[i], basis[i], sizeof(double)*_size);
+		_basis[i] = new LongReal[_size];
+		memcpy(_basis[i], basis[i], sizeof(LongReal)*_size);
 	}
 }
 
 Lattice::Lattice(void)
 {
 	_size = 0;
-	_basis = new double*[0];
+	_basis = new LongReal*[0];
 }
 
 Lattice::~Lattice(void)
@@ -78,43 +78,43 @@ uint Lattice::GetSize()
 	return _size;
 }
 
-double** Lattice::GetBasis()
+LongReal** Lattice::GetBasis()
 {
-	double** result = new double*[_size];
+	LongReal** result = new LongReal*[_size];
 	for (uint i = 0; i < _size; i++)
 	{
-		result[i] = new double[_size];
-		memcpy(result[i], _basis[i], sizeof(double)*_size);
+		result[i] = new LongReal[_size];
+		memcpy(result[i], _basis[i], sizeof(LongReal)*_size);
 	}
 
 	return result;
 }
 
-void Lattice::SetBasis(uint size, double** basis)
+void Lattice::SetBasis(uint size, LongReal** basis)
 {
 	if (!ChechkLinearIdependence(size, basis))
 		throw std::exception("Not linear independ");
 
 	_size = size;
-	_basis = new double*[_size];
+	_basis = new LongReal*[_size];
 	for (uint i = 0; i < _size; i++)
 	{
-		_basis[i] = new double[_size];
-		memcpy(_basis[i], basis[i], sizeof(double)*_size);
+		_basis[i] = new LongReal[_size];
+		memcpy(_basis[i], basis[i], sizeof(LongReal)*_size);
 	}
 }
 
-double* Proj (double* a, double* b,int size)
+LongReal* Proj (LongReal* a, LongReal* b,int size)
 {
-	double scala_b = 0;
-	double scalb_b = 0;
+	LongReal scala_b = 0;
+	LongReal scalb_b = 0;
 	for (int i = 0; i < size; i++)
 	{
 		scala_b += a[i] * b[i];
 		scalb_b += b[i] * b[i];
 	}
-	double scal_na_scal = scala_b / scalb_b;
-	double* proj = new double[size];
+	LongReal scal_na_scal = scala_b / scalb_b;
+	LongReal* proj = new LongReal[size];
 	for(int j = 0; j < size; j++)
 	{
 		proj[j] = scal_na_scal * b[j];
@@ -122,12 +122,12 @@ double* Proj (double* a, double* b,int size)
 	return proj;
 }
 
-double** Lattice::GramSchmidt()
+LongReal** Lattice::GramSchmidt()
 {
-	double** ort_vectors=new double*[_size];
+	LongReal** ort_vectors=new LongReal*[_size];
 	for (int i = 0; i < _size; i++)
 	{
-		ort_vectors[i]=new double[_size];
+		ort_vectors[i]=new LongReal[_size];
 		if (!i)
 		{
 			for (int j = 0; j < _size; j++)
@@ -142,7 +142,7 @@ double** Lattice::GramSchmidt()
 
 		for (int k = 0; k < i; k++)
 		{
-			double* proj = Proj(_basis[i], ort_vectors[k], _size);
+			LongReal* proj = Proj(_basis[i], ort_vectors[k], _size);
 			for (int p = 0;p < _size; p++)
 			{
 				ort_vectors[i][p] -= proj[p];
