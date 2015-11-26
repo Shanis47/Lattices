@@ -12,6 +12,7 @@ public:
 	Lattice(uint size, double** basis);
 	~Lattice(void);
 
+	double** GramSchmidt();
 	void SetBasis(uint, double** );
 	uint GetSize();
 	double** GetBasis();

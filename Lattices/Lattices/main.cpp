@@ -1,4 +1,4 @@
-#include "LongReal.h"
+#include "Lattice.h"
 #include <iostream>
 using namespace std;
 
@@ -6,55 +6,44 @@ int Menu();
 
 int main()
 {
-	LongReal a;
-	LongReal b;
+	Lattice* lattice = new Lattice();
+
 	while (int menuResult = Menu())
 	{
 		switch (menuResult)
 		{
 		case 1:
-			cout << "enter LongReal" << endl;
-			cin >> a;
-			cout << a << endl;
+			delete lattice;
+			lattice = InputFromKeyboard();
 			break;
 		case 2:
-			cout << "enter LongReal" << endl;
-			cin >> a;
-			cin >> b;
-			cout << a << endl;
-			cout << b << endl;
-			cout << "a == b : " << (a == b) << endl; 
-			cout << "a != b : " << (a != b) << endl; 
-			cout << "a > b : " << (a > b) << endl; 
-			cout << "a < b : " << (a < b) << endl; 
-			cout << "a >= b : " << (a >= b) << endl; 
-			cout << "a <= b : " << (a <= b) << endl; 
+			delete lattice;
+			lattice = InputFromFile();
 			break;
 		case 3:
-			cout << "enter LongReal" << endl;
-			cin >> a;
-			cin >> b;
-			cout << a << endl;
-			cout << b << endl;
-
-			cout << "a + b : " << (a + b) << endl; 
-			cout << "a - b : " << (a - b) << endl; 
-			cout << "a * b : " << (a * b) << endl;
-			cout << "a / b : " << (a / b) << endl;
+			PrintLattice(lattice);
 			break;
+		case 4:
+			{
+				Lattice* ort_vect = new Lattice(lattice->GetSize(), lattice->GramSchmidt());
+				PrintLattice(ort_vect);
+				delete ort_vect;
+				break;
+			}
 		default:
 			cout << "Incorrect command" << endl;
 		}
 	}
-
+	delete lattice;
 	return 0;
 }
 
 int Menu()
 {
-	cout << "1. I/O test" << endl;
-	cout << "2. Logical test" << endl;
-	cout << "3. Arithmetic test" << endl;
+	cout << "1. Input from keyboard" << endl;
+	cout << "2. Input from file" << endl;
+	cout << "3. Print lattice basis" << endl;
+	cout << "4. Do GramSchmidt" << endl;
 	cout << "0. Exit" << endl;
 	int result;
 	cin >> result;
