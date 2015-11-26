@@ -107,8 +107,11 @@ void Lattice::SetBasis(uint size, LongReal** basis)
 
 LongReal* Proj (LongReal* a, LongReal* b,int size)
 {
-	LongReal scala_b = 0;
-	LongReal scalb_b = 0;
+	LongReal scala_b;
+	LongReal scalb_b;
+	scala_b = 0.0; 
+	scalb_b = 0.0;
+
 	for (int i = 0; i < size; i++)
 	{
 		scala_b += a[i] * b[i];
