@@ -52,6 +52,36 @@ const LongReal LongReal::operator= (const double& r)
 
 	for (int i = 0; i < MAX_ACCURACY; i++)
 		this->_negDigits[i] = ((int)(r * pow(RADIX, i+1)) % RADIX);
+
+	return *this;
+}
+
+const LongReal LongReal::operator += (LongReal& second)
+{
+	LongReal result = *this + second;
+	*this = result;
+	return result;
+}
+
+const LongReal LongReal::operator -= (LongReal& second)
+{
+	LongReal result = *this - second;
+	*this = result;
+	return result;
+}
+	
+const LongReal LongReal::operator *= (LongReal& second)
+{
+	LongReal result = *this * second;
+	*this = result;
+	return result;
+}
+	
+const LongReal LongReal::operator /= (LongReal& second)
+{
+	LongReal result = *this / second;
+	*this = result;
+	return result;
 }
 
 const bool LongReal::operator == (const LongReal& second) const
@@ -118,7 +148,7 @@ const bool LongReal::operator <= (const LongReal& second) const
 }
 
 //Arithmetical operators
-const LongReal LongReal::operator + (const LongReal& second) const
+LongReal LongReal::operator + (const LongReal& second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return (*this - (-second));
@@ -154,7 +184,7 @@ const LongReal LongReal::operator + (const LongReal& second) const
 	return result;
 }
 
-const LongReal LongReal::operator - (const LongReal& second) const
+LongReal LongReal::operator - (const LongReal& second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return (*this + (-second));
@@ -192,7 +222,7 @@ const LongReal LongReal::operator - (const LongReal& second) const
 	return result;
 }
 
-const LongReal LongReal::operator * (const LongReal& second) const
+LongReal LongReal::operator * (const LongReal& second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return -(*this * (-second));
@@ -238,7 +268,7 @@ const LongReal LongReal::operator * (const LongReal& second) const
 	return result;
 }
 
-const LongReal LongReal::operator / (const LongReal& second) const
+LongReal LongReal::operator / (const LongReal& second) const
 {
 	if (this->_isPositive && !second._isPositive)
 		return -(*this / (-second));

@@ -24,13 +24,17 @@ public:
 
 	//Binary
 	const LongReal operator = (LongReal& second);
+	const LongReal operator += (LongReal& second);
+	const LongReal operator -= (LongReal& second);
+	const LongReal operator *= (LongReal& second);
+	const LongReal operator /= (LongReal& second);
 	const LongReal operator = (const double& r);
 
 	//Arithmetical operators
-	const LongReal operator + (const LongReal& second) const;
-	const LongReal operator - (const LongReal& second) const;
-	const LongReal operator * (const LongReal& second) const;
-	const LongReal operator / (const LongReal& second) const;
+	LongReal operator + (const LongReal& second) const;
+	LongReal operator - (const LongReal& second) const;
+	LongReal operator * (const LongReal& second) const;
+	LongReal operator / (const LongReal& second) const;
 
 	//Logical operators
 	const bool operator == (const LongReal& second) const;
