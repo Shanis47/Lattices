@@ -24,6 +24,7 @@ public:
 
 	//Binary
 	const LongReal operator = (LongReal& second);
+	const LongReal operator = (const double& r);
 
 	//Arithmetical operators
 	const LongReal operator + (const LongReal& second) const;
@@ -42,4 +43,6 @@ public:
 	//I/O operators
 	friend ostream& operator << (ostream& out, const LongReal& r);
 	friend istream& operator >> (istream& in, LongReal& r);
+
+	friend LongReal abs(const LongReal& r);
 };

@@ -7,7 +7,8 @@ LongReal* Proj(LongReal* a, LongReal* b, int size);
 bool ChechkLinearIdependence(uint size, LongReal** basis)
 {
 	uint rank = size;
-	LongReal eps = 1e-9;
+	LongReal eps;
+	eps = 1e-9;
 
 	LongReal** work = new LongReal*[size];
 	for (uint i = 0; i < size; i++)

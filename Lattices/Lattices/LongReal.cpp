@@ -1,5 +1,6 @@
 #include "LongReal.h"
 #include <memory.h>
+#include <math.h>
 
 LongReal::LongReal()
 {
@@ -40,6 +41,17 @@ const LongReal LongReal::operator= (LongReal& second)
 	memcpy(this->_posDigits, second._posDigits, sizeof(SBYTE)*MAX_DIGIT_COUNT);
 	memcpy(this->_negDigits, second._negDigits, sizeof(SBYTE)*MAX_ACCURACY);
 	return *this;
+}
+
+const LongReal LongReal::operator= (const double& r)
+{
+	this->_isPositive = r >= 0;
+
+	for (int i = 0; i < MAX_DIGIT_COUNT; i++)
+		this->_posDigits[i] = ((int)(r / pow(RADIX, MAX_DIGIT_COUNT-i)) % RADIX);
+
+	for (int i = 0; i < MAX_ACCURACY; i++)
+		this->_negDigits[i] = ((int)(r * pow(RADIX, i+1)) % RADIX);
 }
 
 const bool LongReal::operator == (const LongReal& second) const
@@ -313,4 +325,11 @@ istream& operator >> (istream& in, LongReal& r)
 
 	delete[] digits;
 	return in;
+}
+
+LongReal abs(const LongReal& r)
+{
+	LongReal result = r;
+	result._isPositive = 1;
+	return result;
 }
