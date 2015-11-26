@@ -142,7 +142,7 @@ double** Lattice::GramSchmidt()
 
 		for (int k = 0; k < i; k++)
 		{
-			double* proj = Proj(_basis[k+1], ort_vectors[k], _size);
+			double* proj = Proj(_basis[i], ort_vectors[k], _size);
 			for (int p = 0;p < _size; p++)
 			{
 				ort_vectors[i][p] -= proj[p];
