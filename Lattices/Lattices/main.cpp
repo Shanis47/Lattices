@@ -128,9 +128,9 @@ Lattice* InputBasis(uint size, istream &input)
 		result = new Lattice();
 	}
 
-/*	for (int i =0; i< size; i++)
+	for (int i =0; i< size; i++)
 		delete[] basis[i];
-*/	delete[] basis;
+	delete[] basis;
 
 	return result;
 }

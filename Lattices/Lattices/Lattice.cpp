@@ -14,7 +14,8 @@ bool ChechkLinearIdependence(uint size, LongReal** basis)
 	for (uint i = 0; i < size; i++)
 	{
 		work[i] = new LongReal[size];
-		memcpy(work[i], basis[i], sizeof(LongReal)*size);
+		for (uint j = 0; j < size; j++)
+			work[i][j] = basis[i][j];
 	}
 
 	bool *line_used = new bool[size];
@@ -56,7 +57,8 @@ Lattice::Lattice(uint size, LongReal** basis)
 	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new LongReal[_size];
-		memcpy(_basis[i], basis[i], sizeof(LongReal)*_size);
+		for (uint j = 0; j < _size; j++)
+			_basis[i][j] = basis[i][j];
 	}
 }
 
@@ -70,7 +72,7 @@ Lattice::~Lattice(void)
 {
 	for (uint i =0; i< _size; i++)
 		delete[] _basis[i];
-
+		
 	delete[] _basis;
 }
 
@@ -85,7 +87,8 @@ LongReal** Lattice::GetBasis()
 	for (uint i = 0; i < _size; i++)
 	{
 		result[i] = new LongReal[_size];
-		memcpy(result[i], _basis[i], sizeof(LongReal)*_size);
+		for (uint j = 0; j < _size; j++)
+			result[i][j] = _basis[i][j];
 	}
 
 	return result;
@@ -101,7 +104,8 @@ void Lattice::SetBasis(uint size, LongReal** basis)
 	for (uint i = 0; i < _size; i++)
 	{
 		_basis[i] = new LongReal[_size];
-		memcpy(_basis[i], basis[i], sizeof(LongReal)*_size);
+		for (uint j = 0; j < _size; j++)
+			_basis[i][j] = basis[i][j];
 	}
 }
 
