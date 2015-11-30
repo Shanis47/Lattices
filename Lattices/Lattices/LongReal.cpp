@@ -132,7 +132,7 @@ const bool LongReal::operator < (const LongReal& second) const
 
 	for (char i = 0; i < MAX_ACCURACY; i++)
 		if (this->_negDigits[i] != second._negDigits[i])
-			return this->_posDigits[i] < second._posDigits[i];
+			return this->_negDigits[i] < second._negDigits[i];
 
 	return 0;
 }

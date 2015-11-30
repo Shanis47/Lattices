@@ -64,7 +64,6 @@ Lattice* InputBasis(uint size, istream &input);
 Lattice* InputFromKeyboard()
 {
 	int size;
-	LongReal** basis;
 	cout << "size = ";
 	cin >> size;
 
