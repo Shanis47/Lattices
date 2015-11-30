@@ -60,7 +60,7 @@ Lattice* InputBasis(uint size, istream &input);
 Lattice* InputFromKeyboard()
 {
 	int size;
-	double** basis;
+	LongReal** basis;
 	cout << "size = ";
 	cin >> size;
 
@@ -91,7 +91,7 @@ void PrintLattice(Lattice* lattice)
 		return;
 	}
 
-	double** basis = lattice->GetBasis();
+	LongReal** basis = lattice->GetBasis();
 
 	for (int i = 0; i < size; i++)
 	{
@@ -107,12 +107,12 @@ void PrintLattice(Lattice* lattice)
 
 Lattice* InputBasis(uint size, istream &input)
 {
-	double** basis;
-	basis = new double*[size];
+	LongReal** basis;
+	basis = new LongReal*[size];
 	
 	for (int i = 0; i < size; i++)
 	{
-		basis[i] = new double[size];
+		basis[i] = new LongReal[size];
 		for (int j = 0; j < size; j++)
 			input >> basis[i][j];
 	}
@@ -128,9 +128,9 @@ Lattice* InputBasis(uint size, istream &input)
 		result = new Lattice();
 	}
 
-	for (int i =0; i< size; i++)
+/*	for (int i =0; i< size; i++)
 		delete[] basis[i];
-	delete[] basis;
+*/	delete[] basis;
 
 	return result;
 }
