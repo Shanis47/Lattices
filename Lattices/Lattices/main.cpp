@@ -1,6 +1,10 @@
 #include "Lattice.h"
 #include <iostream>
 #include <fstream>
+
+#ifdef _DEBUG
+#include <vld.h>
+#endif
 using namespace std;
 
 int Menu();
