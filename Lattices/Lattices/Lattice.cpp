@@ -104,20 +104,25 @@ void Lattice::SetBasis(uint size, double** basis)
 	}
 }
 
-double* Proj (double* a, double* b,int size)
+double CalculateMu(double* a, double* b,int size)
 {
-	double scala_b = 0;
-	double scalb_b = 0;
+	double scal_a_b = 0;
+	double scal_b_b = 0;
 	for (int i = 0; i < size; i++)
 	{
-		scala_b += a[i] * b[i];
-		scalb_b += b[i] * b[i];
+		scal_a_b += a[i] * b[i];
+		scal_b_b += b[i] * b[i];
 	}
-	double scal_na_scal = scala_b / scalb_b;
+	return scal_a_b / scal_b_b;
+}
+
+double* Proj (double* a, double* b,int size)
+{
+	double mu = CalculateMu(a, b,size);
 	double* proj = new double[size];
 	for(int j = 0; j < size; j++)
 	{
-		proj[j] = scal_na_scal * b[j];
+		proj[j] = mu * b[j];
 	}
 	return proj;
 }
@@ -150,5 +155,19 @@ double** Lattice::GramSchmidt()
 			delete[] proj;
 		}
 	}
+
+	this->SetBasis(_size, ort_vectors);
 	return ort_vectors;
+}
+
+double** Lattice::LLLalgorithm()
+{
+	this->GramSchmidt();
+
+	for (int k = 1; k < _size; k++)
+	{
+
+	}
+
+	return 0;
 }
