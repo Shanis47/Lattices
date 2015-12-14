@@ -160,13 +160,40 @@ double** Lattice::GramSchmidt()
 	return ort_vectors;
 }
 
+double LenQuad(double* v, uint size)
+{
+	double result = 0;
+
+	for (uint i = 0; i < size; i++) 
+		result += v[i]*v[i];
+
+	return result;
+}
+
 double** Lattice::LLLalgorithm()
 {
 	this->GramSchmidt();
 
-	for (int k = 1; k < _size; k++)
+	for (int k = 1; k < _size;)
 	{
+		double mu = CalculateMu(_basis[k], _basis[k-1], _size);
+		if (abs(mu) < 0.5)
+		{
+			//TODO: implement step 3
+		}
 
+		if (LenQuad(_basis[k], _size) < (0.75 - mu*mu)*LenQuad(_basis[k-1], _size))
+		{
+			//TODO: implement step 4
+
+			k = k < 2? 1 : k-1;
+		}
+		else
+		{
+			//TODO: implement step 5
+
+			k++;
+		}
 	}
 
 	return 0;
