@@ -189,8 +189,26 @@ double** Lattice::LLLalgorithm()
 		if (LenQuad(_basis[k], _size) < (0.75 - mu*mu)*LenQuad(_basis[k-1], _size))
 		{
 			//TODO: implement step 4
+			//шаг 4.1
+			double Bk_1=LenQuad(_basis[k-1], _size);
+			double Bk=LenQuad(_basis[k], _size);
+			mu=CalculateMu(_basis[k],_basis[k-1],_size);
+			double B=Bk+mu*mu*Bk_1;
+			double mu_k_k_1=mu*Bk_1/B;
+			Bk=Bk_1*Bk/B;
+			Bk_1=B;
+			// шаг 4.2, поменять местами вектора b_k и b_k-1
+			double* buf=new double[_size];
+			for(int i=0;i<_size;i++)
+			{
+				buf[i]=_basis[k][i];
+				_basis[k][i]=_basis[k-1][i];
+				_basis[k-1][i]=buf[i];
+			}
+			//дальше шаг 4.3
 
-			k = k < 2? 1 : k-1;
+			//это шаг 4.5
+				k = k < 2? 1 : k-1;
 		}
 		else
 		{
