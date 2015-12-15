@@ -173,13 +173,17 @@ double LenQuad(double* v, uint size)
 double** Lattice::LLLalgorithm()
 {
 	this->GramSchmidt();
-
+	//надо м считать заранее и каждый раз пересчитывать? или так сойдет??
 	for (int k = 1; k < _size;)
 	{
 		double mu = CalculateMu(_basis[k], _basis[k-1], _size);
 		if (abs(mu) < 0.5)
 		{
-			//TODO: implement step 3
+			double r = mu > 0 ? int(0.5 + mu) : - (int(0.5-mu));
+			for (uint i = 0; i < _size; i++)
+				_basis[k][i] -= r*_basis[k-1][i];
+
+			mu -= r;
 		}
 
 		if (LenQuad(_basis[k], _size) < (0.75 - mu*mu)*LenQuad(_basis[k-1], _size))
