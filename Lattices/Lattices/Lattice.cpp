@@ -175,7 +175,7 @@ double LenQuad(double* v, int size)
 
 void Lattice::LLLalgorithm()
 {
-//	this->GramSchmidt();
+	this->GramSchmidt();
 	
 	double** mu = new double*[_size];
 	double* B = new double[_size];

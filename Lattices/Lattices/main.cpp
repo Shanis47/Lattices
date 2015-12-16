@@ -53,6 +53,7 @@ int Menu()
 	cout << "2. Input from file" << endl;
 	cout << "3. Print lattice basis" << endl;
 	cout << "4. Do GramSchmidt" << endl;
+	cout << "5. Do LLL alghoritm" << endl;
 	cout << "0. Exit" << endl;
 	int result;
 	cin >> result;
