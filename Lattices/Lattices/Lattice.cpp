@@ -7,7 +7,7 @@
 bool ChechkLinearIdependence(uint size, double** basis)
 {
 	uint rank = size;
-	double eps = 1e-9;
+	double eps = 1e-15;
 
 	double** work = new double*[size];
 	for (uint i = 0; i < size; i++)
@@ -158,9 +158,9 @@ void Lattice::GramSchmidt()
 
 	this->SetBasis(_size, ort_vectors);
 	
-	/*for (uint i = 0; i < _size; i++)
-		delete ort_vectors;
-	delete[] ort_vectors;*/
+	for (uint i = 0; i < _size; i++)
+		delete[] ort_vectors[i];
+	delete[] ort_vectors;
 }
 
 double LenQuad(double* v, uint size)
@@ -176,55 +176,5 @@ double LenQuad(double* v, uint size)
 void Lattice::LLLalgorithm()
 {
 	this->GramSchmidt();
-	//надо м считать заранее и каждый раз пересчитывать? или так сойдет??
-	for (int k = 1; k < _size;)
-	{
-		double mu = CalculateMu(_basis[k], _basis[k-1], _size);
-		if (abs(mu) < 0.5)
-		{
-			double r = mu > 0 ? int(0.5 + mu) : - (int(0.5-mu));
-			for (uint i = 0; i < _size; i++)
-				_basis[k][i] -= r*_basis[k-1][i];
-
-			mu -= r;
-		}
-
-		if (LenQuad(_basis[k], _size) < (0.75 - mu*mu)*LenQuad(_basis[k-1], _size))
-		{
-			//шаг 4.1
-			double Bk_1=LenQuad(_basis[k-1], _size);
-			double Bk=LenQuad(_basis[k], _size);
-			mu=CalculateMu(_basis[k],_basis[k-1],_size);
-			double B=Bk+mu*mu*Bk_1;
-			double mu_k_k_1=mu*Bk_1/B;
-			Bk=Bk_1*Bk/B;
-			Bk_1=B;
-			// шаг 4.2, поменять местами вектора b_k и b_k-1
-			double* buf=new double[_size];
-			for(int i=0;i<_size;i++)
-			{
-				buf[i]=_basis[k][i];
-				_basis[k][i]=_basis[k-1][i];
-				_basis[k-1][i]=buf[i];
-			}
-			//дальше шаг 4.3
-
-			//это шаг 4.5
-				k = k < 2? 1 : k-1;
-		}
-		else
-		{
-			//TODO: implement step 5
-			for (int l = k - 2; l >=0; l--)
-			{
-				mu = CalculateMu(_basis[k], _basis[l], _size);
-				double r = abs(mu) > 0.5 ? int(0.5 + mu) : -int(0.5 - mu);
-				for (uint i = 0; i < _size; i++)
-					_basis[k][i] -= r*_basis[l][i];
-
-			}
-
-			k++;
-		}
-	}
+	//все плохо
 }
