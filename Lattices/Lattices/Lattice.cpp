@@ -249,5 +249,19 @@ void Lattice::LLLalgorithm()
 			k++;
 		}
 	}
+}
 
+bool Lattice::CheckLLLConditions()
+{
+	double eps = 1e-9;
+	for (int i = 1; i < _size; i++)
+	{
+		for (int j = 0; j < i; j++)
+			if (abs(CalculateMu(_basis[i],_basis[j],_size)) > 0.5+eps)
+				return 0;
+		if (LenQuad(_basis[i],_size) < (0.75 - CalculateMu(_basis[i], _basis[i-1], _size))*LenQuad(_basis[i-1], _size))
+			return 0;
+	}
+
+	return 1;
 }

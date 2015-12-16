@@ -12,6 +12,7 @@ public:
 
 	void GramSchmidt();
 	void LLLalgorithm();
+	bool CheckLLLConditions();
 
 	void SetBasis(int, double** );
 	int GetSize();

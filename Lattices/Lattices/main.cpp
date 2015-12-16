@@ -37,6 +37,7 @@ int main()
 			{
 				lattice->LLLalgorithm();
 				cout << "LLL-algorithm done" << endl;
+				cout << "Is LLL: " << bool(lattice->CheckLLLConditions()) << endl;
 				break;
 			}
 		default:
