@@ -40,5 +40,8 @@
     <Text Include="test_zero_matrix.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="test5x5.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

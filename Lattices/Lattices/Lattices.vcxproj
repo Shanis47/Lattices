@@ -78,6 +78,7 @@
   <ItemGroup>
     <Text Include="test.txt" />
     <Text Include="test1.txt" />
+    <Text Include="test5x5.txt" />
     <Text Include="test_zero_line.txt" />
     <Text Include="test_zero_matrix.txt" />
   </ItemGroup>

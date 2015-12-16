@@ -29,9 +29,15 @@ int main()
 			break;
 		case 4:
 			{
-				Lattice* ort_vect = new Lattice(lattice->GetSize(), lattice->GramSchmidt());
-				PrintLattice(ort_vect);
-				delete ort_vect;
+				lattice->GramSchmidt();
+				cout << "Gram-Schmidt done" << endl;
+				break;
+			}
+		case 5:
+			{
+				lattice->LLLalgorithm();
+				cout << "LLL-algorithm done" << endl;
+				cout << "Is LLL: " << bool(lattice->CheckLLLConditions()) << endl;
 				break;
 			}
 		default:
@@ -48,6 +54,7 @@ int Menu()
 	cout << "2. Input from file" << endl;
 	cout << "3. Print lattice basis" << endl;
 	cout << "4. Do GramSchmidt" << endl;
+	cout << "5. Do LLL alghoritm" << endl;
 	cout << "0. Exit" << endl;
 	int result;
 	cin >> result;
@@ -55,7 +62,7 @@ int Menu()
 	return result;
 }
 
-Lattice* InputBasis(uint size, istream &input);
+Lattice* InputBasis(int size, istream &input);
 
 Lattice* InputFromKeyboard()
 {
@@ -105,7 +112,7 @@ void PrintLattice(Lattice* lattice)
 	delete[] basis;
 }
 
-Lattice* InputBasis(uint size, istream &input)
+Lattice* InputBasis(int size, istream &input)
 {
 	double** basis;
 	basis = new double*[size];
