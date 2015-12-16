@@ -4,13 +4,13 @@
 #include <exception>
 
  double* Proj(double* a, double* b, int size);
-bool ChechkLinearIdependence(uint size, double** basis)
+bool ChechkLinearIdependence(int size, double** basis)
 {
-	uint rank = size;
+	int rank = size;
 	double eps = 1e-15;
 
 	double** work = new double*[size];
-	for (uint i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		work[i] = new double[size];
 		memcpy(work[i], basis[i], sizeof(double)*size);
@@ -45,14 +45,14 @@ bool ChechkLinearIdependence(uint size, double** basis)
 	return rank == size;
 }
 
-Lattice::Lattice(uint size, double** basis)
+Lattice::Lattice(int size, double** basis)
 {
 	if (!ChechkLinearIdependence(size, basis))
 		throw std::exception("Not linear independ");
 
 	_size = size;
 	_basis = new double*[_size];
-	for (uint i = 0; i < _size; i++)
+	for (int i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
 		memcpy(_basis[i], basis[i], sizeof(double)*_size);
@@ -67,13 +67,13 @@ Lattice::Lattice(void)
 
 Lattice::~Lattice(void)
 {
-	for (uint i =0; i< _size; i++)
+	for (int i =0; i< _size; i++)
 		delete[] _basis[i];
 
 	delete[] _basis;
 }
 
-uint Lattice::GetSize()
+int Lattice::GetSize()
 {
 	return _size;
 }
@@ -81,7 +81,7 @@ uint Lattice::GetSize()
 double** Lattice::GetBasis()
 {
 	double** result = new double*[_size];
-	for (uint i = 0; i < _size; i++)
+	for (int i = 0; i < _size; i++)
 	{
 		result[i] = new double[_size];
 		memcpy(result[i], _basis[i], sizeof(double)*_size);
@@ -90,14 +90,14 @@ double** Lattice::GetBasis()
 	return result;
 }
 
-void Lattice::SetBasis(uint size, double** basis)
+void Lattice::SetBasis(int size, double** basis)
 {
 	if (!ChechkLinearIdependence(size, basis))
 		throw std::exception("Not linear independ");
 
 	_size = size;
 	_basis = new double*[_size];
-	for (uint i = 0; i < _size; i++)
+	for (int i = 0; i < _size; i++)
 	{
 		_basis[i] = new double[_size];
 		memcpy(_basis[i], basis[i], sizeof(double)*_size);
@@ -158,16 +158,16 @@ void Lattice::GramSchmidt()
 
 	this->SetBasis(_size, ort_vectors);
 	
-	for (uint i = 0; i < _size; i++)
+	for (int i = 0; i < _size; i++)
 		delete[] ort_vectors[i];
 	delete[] ort_vectors;
 }
 
-double LenQuad(double* v, uint size)
+double LenQuad(double* v, int size)
 {
 	double result = 0;
 
-	for (uint i = 0; i < size; i++) 
+	for (int i = 0; i < size; i++) 
 		result += v[i]*v[i];
 
 	return result;
@@ -179,23 +179,23 @@ void Lattice::LLLalgorithm()
 	
 	double** mu = new double*[_size];
 	double* B = new double[_size];
-	for (uint i = 0; i < _size; i++)
+	for (int i = 0; i < _size; i++)
 	{
 		B[i] = LenQuad(_basis[i], _size);
 		mu[i] = new double[_size];
-		for (uint j = 0; j < _size; j++)
+		for (int j = 0; j < _size; j++)
 			mu[i][j] = j == i ? 0 : CalculateMu(_basis[i], _basis[j], _size);
 	}
 
-	for (uint k = 1; k < _size;)
+	for (int k = 1; k < _size;)
 	{
 		//step 3
 		if (abs(mu[k][k-1]) > 0.5)
 		{
 			double r = mu[k][k-1] > 0 ? int(0.5 + mu[k][k-1]) : -int(0.5-mu[k][k-1]);
-			for (uint i = 0; i < _size; i++)
+			for (int i = 0; i < _size; i++)
 				_basis[k][i] -= r*_basis[k-1][i];
-			for (uint j = 0; j < k-2; k++)
+			for (int j = 0; j < k-2; k++)
 				mu[k][j] -= mu[k-1][j];
 			mu[k][k-1] -= r;
 		}
@@ -203,10 +203,50 @@ void Lattice::LLLalgorithm()
 		//step 4
 		if (B[k] < (0.75 - mu[k][k-1]*mu[k][k-1])*B[k-1])
 		{
+			double mu_l = mu[k][k-1]; 
+			double B_l = B[k] + mu_l*mu_l*B[k-1];
+			mu[k][k-1] = mu_l*B[k-1]/B_l;
+			B[k] = B[k-1]*B[k]/B_l;
+			B[k-1] = B_l;
+
+			{
+				double* buf = _basis[k];
+				_basis[k] = _basis[k-1];
+				_basis[k-1] = buf;
+			}
+
+			for (int j = 0; j < k-2; j++)
+			{
+				double buf1 = mu[k][j];
+				mu[k][j] = mu[k-1][j];
+				mu[k-1][j] = buf1;
+			}
+
+			for (int s = k+1; s < _size; s++)
+			{
+				double t = mu[s][k];
+				mu[s][k] = mu[s][k-1] - mu_l*t;
+				mu[s][k-1] = t + mu[k][k-1]*mu[s][k];
+			}
+
+			k = k-1 > 1 ? k-1: 1;
 		}
 		else
 		{
-			//step 5
+			for (int l = k - 2; l >= 0; l--)
+			{
+				if (abs(mu[k][l]) > 0.5)
+				{
+					double r = mu[k][l] > 0 ? int(0.5 + mu[k][l]) : -int(0.5-mu[k][l]);
+					for (int i = 0; i < _size; i++)
+						_basis[k][i] -= r*_basis[l][i];
+					for (int j = 0; j < l-1; k++)
+						mu[k][j] -= mu[l][j];
+					mu[k][l] -= r;
+				}
+			}
+
+			k++;
 		}
 	}
 

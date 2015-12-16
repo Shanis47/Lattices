@@ -60,7 +60,7 @@ int Menu()
 	return result;
 }
 
-Lattice* InputBasis(uint size, istream &input);
+Lattice* InputBasis(int size, istream &input);
 
 Lattice* InputFromKeyboard()
 {
@@ -110,7 +110,7 @@ void PrintLattice(Lattice* lattice)
 	delete[] basis;
 }
 
-Lattice* InputBasis(uint size, istream &input)
+Lattice* InputBasis(int size, istream &input)
 {
 	double** basis;
 	basis = new double*[size];

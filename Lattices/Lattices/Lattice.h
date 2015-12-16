@@ -1,22 +1,20 @@
 #pragma once
 
-#define uint unsigned int
-
 class Lattice
 {
 private:
-	uint _size;
+	int _size;
 	double** _basis;
 public:
 	Lattice(void);
-	Lattice(uint size, double** basis);
+	Lattice(int size, double** basis);
 	~Lattice(void);
 
 	void GramSchmidt();
 	void LLLalgorithm();
 
-	void SetBasis(uint, double** );
-	uint GetSize();
+	void SetBasis(int, double** );
+	int GetSize();
 	double** GetBasis();
 };
 
