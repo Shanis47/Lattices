@@ -176,5 +176,38 @@ double LenQuad(double* v, uint size)
 void Lattice::LLLalgorithm()
 {
 	this->GramSchmidt();
-	//все плохо
+	
+	double** mu = new double*[_size];
+	double* B = new double[_size];
+	for (uint i = 0; i < _size; i++)
+	{
+		B[i] = LenQuad(_basis[i], _size);
+		mu[i] = new double[_size];
+		for (uint j = 0; j < _size; j++)
+			mu[i][j] = j == i ? 0 : CalculateMu(_basis[i], _basis[j], _size);
+	}
+
+	for (uint k = 1; k < _size;)
+	{
+		//step 3
+		if (abs(mu[k][k-1]) > 0.5)
+		{
+			double r = mu[k][k-1] > 0 ? int(0.5 + mu[k][k-1]) : -int(0.5-mu[k][k-1]);
+			for (uint i = 0; i < _size; i++)
+				_basis[k][i] -= r*_basis[k-1][i];
+			for (uint j = 0; j < k-2; k++)
+				mu[k][j] -= mu[k-1][j];
+			mu[k][k-1] -= r;
+		}
+
+		//step 4
+		if (B[k] < (0.75 - mu[k][k-1]*mu[k][k-1])*B[k-1])
+		{
+		}
+		else
+		{
+			//step 5
+		}
+	}
+
 }
