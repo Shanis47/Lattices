@@ -127,7 +127,7 @@ double* Proj (double* a, double* b,int size)
 	return proj;
 }
 
-double** Lattice::GramSchmidt()
+void Lattice::GramSchmidt()
 {
 	double** ort_vectors=new double*[_size];
 	for (int i = 0; i < _size; i++)
@@ -157,7 +157,10 @@ double** Lattice::GramSchmidt()
 	}
 
 	this->SetBasis(_size, ort_vectors);
-	return ort_vectors;
+	
+	/*for (uint i = 0; i < _size; i++)
+		delete ort_vectors;
+	delete[] ort_vectors;*/
 }
 
 double LenQuad(double* v, uint size)
@@ -170,7 +173,7 @@ double LenQuad(double* v, uint size)
 	return result;
 }
 
-double** Lattice::LLLalgorithm()
+void Lattice::LLLalgorithm()
 {
 	this->GramSchmidt();
 	//надо м считать заранее и каждый раз пересчитывать? или так сойдет??
@@ -188,7 +191,6 @@ double** Lattice::LLLalgorithm()
 
 		if (LenQuad(_basis[k], _size) < (0.75 - mu*mu)*LenQuad(_basis[k-1], _size))
 		{
-			//TODO: implement step 4
 			//шаг 4.1
 			double Bk_1=LenQuad(_basis[k-1], _size);
 			double Bk=LenQuad(_basis[k], _size);
@@ -213,10 +215,16 @@ double** Lattice::LLLalgorithm()
 		else
 		{
 			//TODO: implement step 5
+			for (int l = k - 2; l >=0; l--)
+			{
+				mu = CalculateMu(_basis[k], _basis[l], _size);
+				double r = abs(mu) > 0.5 ? int(0.5 + mu) : -int(0.5 - mu);
+				for (uint i = 0; i < _size; i++)
+					_basis[k][i] -= r*_basis[l][i];
+
+			}
 
 			k++;
 		}
 	}
-
-	return 0;
 }

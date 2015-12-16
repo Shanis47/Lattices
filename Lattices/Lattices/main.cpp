@@ -29,9 +29,14 @@ int main()
 			break;
 		case 4:
 			{
-				Lattice* ort_vect = new Lattice(lattice->GetSize(), lattice->GramSchmidt());
-				PrintLattice(ort_vect);
-				delete ort_vect;
+				lattice->GramSchmidt();
+				cout << "Gram-Schmidt done" << endl;
+				break;
+			}
+		case 5:
+			{
+				lattice->LLLalgorithm();
+				cout << "LLL-algorithm done" << endl;
 				break;
 			}
 		default:

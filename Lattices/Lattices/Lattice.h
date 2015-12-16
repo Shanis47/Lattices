@@ -12,8 +12,8 @@ public:
 	Lattice(uint size, double** basis);
 	~Lattice(void);
 
-	double** GramSchmidt();
-	double** LLLalgorithm();
+	void GramSchmidt();
+	void LLLalgorithm();
 
 	void SetBasis(uint, double** );
 	uint GetSize();
