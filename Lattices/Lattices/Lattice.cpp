@@ -3,7 +3,6 @@
 #include <math.h>
 #include <exception>
 
- double* Proj(double* a, double* b, int size);
 bool ChechkLinearIdependence(int size, double** basis)
 {
 	int rank = size;
@@ -116,9 +115,10 @@ double CalculateMu(double* a, double* b,int size)
 	return scal_a_b / scal_b_b;
 }
 
-double* Proj (double* a, double* b,int size)
+double* Proj (double* a, double* b,int size, double &mu)
 {
-	double mu = CalculateMu(a, b,size);
+	mu = CalculateMu(a, b,size);
+
 	double* proj = new double[size];
 	for(int j = 0; j < size; j++)
 	{
@@ -127,8 +127,25 @@ double* Proj (double* a, double* b,int size)
 	return proj;
 }
 
-void Lattice::GramSchmidt()
+double LenQuad(double* v, int size)
 {
+	double result =0;
+	for (int i = 0; i < size; i++)
+		result += v[i]*v[i];
+
+	return result;
+}
+
+double** Lattice::GramSchmidt(double** &mu, double* &B)
+{
+	mu = new double*[_size];
+	B = new double[_size];
+	for (int i = 0; i < _size; i++)
+	{
+		mu[i] = new double[_size];
+		memset(mu[i], 0, sizeof(double)*_size);
+	}
+
 	double** ort_vectors=new double*[_size];
 	for (int i = 0; i < _size; i++)
 	{
@@ -147,7 +164,7 @@ void Lattice::GramSchmidt()
 
 		for (int k = 0; k < i; k++)
 		{
-			double* proj = Proj(_basis[i], ort_vectors[k], _size);
+			double* proj = Proj(_basis[i], ort_vectors[k], _size, mu[i][k]);
 			for (int p = 0;p < _size; p++)
 			{
 				ort_vectors[i][p] -= proj[p];
@@ -156,37 +173,25 @@ void Lattice::GramSchmidt()
 		}
 	}
 
-	this->SetBasis(_size, ort_vectors);
-	
 	for (int i = 0; i < _size; i++)
-		delete[] ort_vectors[i];
-	delete[] ort_vectors;
+		B[i] = LenQuad(ort_vectors[i], _size);
+	
+	return ort_vectors;
 }
 
-double LenQuad(double* v, int size)
+double** Lattice::GramSchmidt()
 {
-	double result = 0;
-
-	for (int i = 0; i < size; i++) 
-		result += v[i]*v[i];
-
-	return result;
+	double** mu = NULL;
+	double* B = NULL;
+	return this->GramSchmidt(mu, B);
 }
 
 void Lattice::LLLalgorithm()
 {
-	this->GramSchmidt();
+	double** mu = NULL;
+	double* B = NULL;
+	this->GramSchmidt(mu, B);
 	
-	double** mu = new double*[_size];
-	double* B = new double[_size];
-	for (int i = 0; i < _size; i++)
-	{
-		B[i] = LenQuad(_basis[i], _size);
-		mu[i] = new double[_size];
-		for (int j = 0; j < _size; j++)
-			mu[i][j] = j == i ? 0 : CalculateMu(_basis[i], _basis[j], _size);
-	}
-
 	for (int k = 1; k < _size;)
 	{
 		//step 3
@@ -195,8 +200,8 @@ void Lattice::LLLalgorithm()
 			int r = mu[k][k-1] > 0 ? int(0.5 + mu[k][k-1]) : -int(0.5-mu[k][k-1]);
 			for (int i = 0; i < _size; i++)
 				_basis[k][i] -= r*_basis[k-1][i];
-			for (int j = 0; j < k-2; j++)
-				mu[k][j] -= mu[k-1][j];
+			for (int j = 0; j <= k-2; j++)
+				mu[k][j] -= r*mu[k-1][j];
 			mu[k][k-1] -= r;
 		}
 
@@ -215,7 +220,7 @@ void Lattice::LLLalgorithm()
 				_basis[k-1] = buf;
 			}
 
-			for (int j = 0; j < k-2; j++)
+			for (int j = 0; j <= k-2; j++)
 			{
 				double buf1 = mu[k][j];
 				mu[k][j] = mu[k-1][j];
@@ -240,8 +245,8 @@ void Lattice::LLLalgorithm()
 					int r = mu[k][l] > 0 ? int(0.5 + mu[k][l]) : -int(0.5-mu[k][l]);
 					for (int i = 0; i < _size; i++)
 						_basis[k][i] -= r*_basis[l][i];
-					for (int j = 0; j < l-1; j++)
-						mu[k][j] -= mu[l][j];
+					for (int j = 0; j <= l-1; j++)
+						mu[k][j] -= r*mu[l][j];
 					mu[k][l] -= r;
 				}
 			}
@@ -249,19 +254,4 @@ void Lattice::LLLalgorithm()
 			k++;
 		}
 	}
-}
-
-bool Lattice::CheckLLLConditions()
-{
-	double eps = 1e-9;
-	for (int i = 1; i < _size; i++)
-	{
-		for (int j = 0; j < i; j++)
-			if (abs(CalculateMu(_basis[i],_basis[j],_size)) > 0.5+eps)
-				return 0;
-		if (LenQuad(_basis[i],_size) < (0.75 - CalculateMu(_basis[i], _basis[i-1], _size))*LenQuad(_basis[i-1], _size))
-			return 0;
-	}
-
-	return 1;
 }

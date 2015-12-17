@@ -29,15 +29,16 @@ int main()
 			break;
 		case 4:
 			{
-				lattice->GramSchmidt();
+				Lattice* ort = new Lattice(lattice->GetSize(), lattice->GramSchmidt());
+				PrintLattice(ort);
 				cout << "Gram-Schmidt done" << endl;
+				delete ort;
 				break;
 			}
 		case 5:
 			{
 				lattice->LLLalgorithm();
 				cout << "LLL-algorithm done" << endl;
-				cout << "Is LLL: " << bool(lattice->CheckLLLConditions()) << endl;
 				break;
 			}
 		default:

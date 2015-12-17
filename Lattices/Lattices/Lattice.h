@@ -5,14 +5,14 @@ class Lattice
 private:
 	int _size;
 	double** _basis;
+	double** GramSchmidt(double** &mu, double* &B);
 public:
 	Lattice(void);
 	Lattice(int size, double** basis);
 	~Lattice(void);
 
-	void GramSchmidt();
+	double** GramSchmidt();
 	void LLLalgorithm();
-	bool CheckLLLConditions();
 
 	void SetBasis(int, double** );
 	int GetSize();
